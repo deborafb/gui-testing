@@ -24,7 +24,6 @@ describe('countries', () => {
 
 
   // Remove .only and implement others test cases!
-
   it.only('Test case 1: add and remove province in United Kingdom', async () => {
     // Click in countries in side menu
     await driver.findElement(By.linkText('Countries')).click();
@@ -85,7 +84,7 @@ describe('countries', () => {
     const bodyText = await driver.findElement(By.tagName('body')).getText();
     assert(bodyText.includes('Country has been successfully created.'));
 
-  })
+  });
 
   it.only('Test case 3: Change value of field "enabled"', async () => {
     // Click in countries in side menu
@@ -114,6 +113,71 @@ describe('countries', () => {
 
   });
 
+  it.only('Test case 4: Add province Canada', async () => {
+
+    // Click in countries in side menu
+    await driver.findElement(By.linkText('Countries')).click();
+
+    // Select only enabled countries
+    let dropdown = await driver.findElement(By.id('criteria_enabled'));
+    await dropdown.findElement(By.xpath("//option[. = 'Yes']")).click();
+
+    // Type to search a specify country
+    await driver.findElement(By.id('criteria_code_value')).sendKeys('CA');
+
+    // Click in filter blue button
+    await driver.findElement(By.css('*[class^="ui blue labeled icon button"]')).click();
+
+    // Click in edit of the last country
+    const buttons = await driver.findElements(By.css('*[class^="ui labeled icon button "]'));
+    await buttons[buttons.length - 1].click();
+
+    // Click in filter blue button
+    await driver.findElement(By.css('.ui > .ui > .required > #sylius_country_provinces > .ui')).click();
+
+    // Filling data of provinces
+    await driver.findElement(By.id('sylius_country_provinces_0_code')).sendKeys('ON-ON');
+    await driver.findElement(By.id('sylius_country_provinces_0_name')).sendKeys('Ontario');
+    await driver.findElement(By.id('sylius_country_provinces_0_abbreviation')).sendKeys('On');
+
+    // Click on Save changes button
+    await driver.findElement(By.id('sylius_save_changes_button')).click();
+    // Assert that country has been updated
+    const bodyText = await driver.findElement(By.tagName('body')).getText();
+    assert(bodyText.includes('Country has been successfully updated.'));
+
+  });
+
+  it.only('Test case 5: Remove province Canada', async () => {
+    // Click in countries in side menu
+    await driver.findElement(By.linkText('Countries')).click();
+
+    // Select only enabled countries
+    let dropdown = await driver.findElement(By.id('criteria_enabled'));
+    await dropdown.findElement(By.xpath("//option[. = 'Yes']")).click();
+
+    // Type to search a specify country
+    await driver.findElement(By.id('criteria_code_value')).sendKeys('CA');
+
+    // Click in filter blue button
+    await driver.findElement(By.css('*[class^="ui blue labeled icon button"]')).click();
+
+    // Click in edit of the last country
+    const buttons = await driver.findElements(By.css('*[class^="ui labeled icon button "]'));
+    await buttons[buttons.length - 1].click();
+
+    // Click on Delete button
+    await driver.findElement(By.css('.required > #sylius_country_provinces > div > div > .red')).click();
+
+    // Click on Save changes button
+    await driver.findElement(By.id('sylius_save_changes_button')).click();
+
+    // Assert that country has been updated
+    const bodyTextAfterRemove = await driver.findElement(By.tagName('body')).getText();
+    assert(bodyTextAfterRemove.includes('Country has been successfully updated.'));
+
+  });
+
   it.only('Test case 6: Filter disabled country', async () => {
     // Click in countries in side menu
     await driver.findElement(By.linkText('Countries')).click();
@@ -128,10 +192,11 @@ describe('countries', () => {
     // Click in filter blue button
     await driver.findElement(By.css('*[class^="ui blue labeled icon button"]')).click();
 
-    // Assert that country has been created
+    // Assert that country has been returned
     const bodyText = await driver.findElement(By.tagName('body')).getText();
     assert(bodyText.includes('Cape Verde'));
-  })
+
+  });
 
   it.only('Test case 7: Add province with invalid code', async () => {
     // Click in countries in side menu
@@ -166,7 +231,7 @@ describe('countries', () => {
     // Assert that country wasn't updated
     const bodyText = await driver.findElement(By.tagName('body')).getText();
     assert(bodyText.includes('This form contains errors.'));
-  })
+  });
 
   it.only('Test case 8: Add province without name', async () => {
     // Click in countries in side menu
@@ -200,7 +265,7 @@ describe('countries', () => {
     // Assert that country wasn't updated
     const bodyText = await driver.findElement(By.tagName('body')).getText();
     assert(bodyText.includes('This form contains errors.'));
-  })
+  });
 
   it.only('Test case 9: Add two provinces with the same code in a single country', async () => {
     // Click in countries in side menu
@@ -243,7 +308,7 @@ describe('countries', () => {
     // Assert that country wasn't updated
     const bodyText = await driver.findElement(By.tagName('body')).getText();
     assert(bodyText.includes('HTTP 500'));
-  })
+  });
 
   it.only('Test case 10: Add province with lowercase code characters', async () => {
     // Click in countries in side menu
